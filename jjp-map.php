@@ -44,7 +44,15 @@ class JJPMapView
             plugins_url('/js/scripts.js', __FILE__),
             array('jquery')
         );
-        wp_enqueue_script('googlemaps', '//maps.googleapis.com/maps/api/js', null, null);
+
+        $gMapApiKey = get_option('jjp-map-api-key');
+
+        if ($gMapApiKey) {
+            wp_enqueue_script('googlemaps', '//maps.googleapis.com/maps/api/js?key=' . $gMapApiKey, null, null);
+        } else {
+            wp_enqueue_script('googlemaps', '//maps.googleapis.com/maps/api/js', null, null);
+        }
+
         wp_enqueue_script('jjp-map-scripts');
     }
 
