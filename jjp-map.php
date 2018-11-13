@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: JJP - Map
  * Plugin URI:
@@ -21,19 +22,31 @@
  * You should have received a copy of the GNU General Public License
  * along with JJP - Map. If not, see {License URI}.
  */
-
-wp_register_script(
-    'jjp-map-scripts',
-    plugins_url('/js/scripts.js', __FILE__),
-    array('jquery')
-);
-wp_enqueue_script('jjp-map-scripts');
-wp_enqueue_script('googlemaps', '//maps.googleapis.com/maps/api/js', null, null);
-
-function jjp_gmap_show_map($args, $content)
+class JJPMapView
 {
 
-    return '<div id="map" style="height: 300px;">map</div>';
+    function __construct()
+    {
+
+        $this->register_scripts();
+    }
+
+    function jjp_gmap_show_map()
+    {
+
+        return '<div id="map" style="height: 300px;">map</div>';
+    }
+
+    function register_scripts(){
+        wp_register_script(
+            'jjp-map-scripts',
+            plugins_url('/js/scripts.js', __FILE__),
+            array('jquery')
+        );
+        wp_enqueue_script('googlemaps', '//maps.googleapis.com/maps/api/js', null, null);
+        wp_enqueue_script('jjp-map-scripts');
+    }
+
 }
 
-add_shortcode('jjp-map', 'jjp_gmap_show_map');
+add_shortcode('jjp-map', [new JJPMapView(), 'jjp_gmap_show_map']);
