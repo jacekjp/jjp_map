@@ -78,6 +78,12 @@ class JJPMapAdmin
     function printAdminPage()
     {
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && check_admin_referer('jjp-map-api-key-token')) {
+            $apiKey = sanitize_text_field($_POST['jjp-map-api-key']);
+
+            update_option('jjp-map-api-key', $apiKey);
+        }
+
         require_once plugin_dir_path(__FILE__) . 'index.php';
     }
 }
