@@ -37,7 +37,8 @@ class JJPMapView
         return '<div id="map" style="height: 300px;">map</div>';
     }
 
-    function register_scripts(){
+    function register_scripts()
+    {
         wp_register_script(
             'jjp-map-scripts',
             plugins_url('/js/scripts.js', __FILE__),
@@ -51,8 +52,34 @@ class JJPMapView
 
 add_shortcode('jjp-map', [new JJPMapView(), 'jjp_gmap_show_map']);
 
-class JJPMapAdmin {
+class JJPMapAdmin
+{
 
+    private static $plugin_id = 'jjp-map';
+    private $user_capability = 'manage_options';
+
+    function __construct()
+    {
+
+        add_action('admin_menu', array($this, 'createAdminMenu'));
+    }
+
+    function createAdminMenu()
+    {
+        add_menu_page(
+            'JJP - Map',
+            'Map',
+            $this->user_capability,
+            static::$plugin_id,
+            array($this, 'printAdminPage')
+        );
+    }
+
+    function printAdminPage()
+    {
+
+        require_once plugin_dir_path(__FILE__) . 'index.php';
+    }
 }
 
 $JJPMapAdmin = new JJPMapAdmin();
