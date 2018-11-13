@@ -50,3 +50,9 @@ class JJPMapView
 }
 
 add_shortcode('jjp-map', [new JJPMapView(), 'jjp_gmap_show_map']);
+
+class JJPMapAdmin {
+
+}
+
+$JJPMapAdmin = new JJPMapAdmin();
