@@ -86,11 +86,21 @@ class JJPMapAdmin
     function printAdminPage()
     {
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && check_admin_referer('jjp-map-api-key-token')) {
-            $apiKey = sanitize_text_field($_POST['jjp-map-api-key']);
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_name'])){
+            if ($_POST['form_name'] == 'api-key' && check_admin_referer('jjp-map-api-key-token')) {
+                $apiKey = sanitize_text_field($_POST['jjp-map-api-key']);
+                update_option('jjp-map-api-key', $apiKey);
+            }
 
-            update_option('jjp-map-api-key', $apiKey);
+            if ($_POST['form_name'] == 'settings' && check_admin_referer('jjp-map-settings-token')) {
+                $width = sanitize_text_field($_POST['jjp-map-width']);
+                update_option('jjp-map-width', $width);
+                $height = sanitize_text_field($_POST['jjp-map-height']);
+                update_option('jjp-map-height', $height);
+            }
+
         }
+
 
         require_once plugin_dir_path(__FILE__) . 'index.php';
     }
