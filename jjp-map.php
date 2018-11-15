@@ -33,8 +33,10 @@ class JJPMapView
 
     function jjp_gmap_show_map()
     {
+        $width = get_option('jjp-map-width') ?: "100%";
+        $height = get_option('jjp-map-height') ?:  "400px";
 
-        return '<div id="map" style="height: 300px;">map</div>';
+        return "<div id='map' style='width: $width; height: $height'>map</div>";
     }
 
     function register_scripts()
