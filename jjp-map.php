@@ -34,7 +34,7 @@ class JJPMapView
     function jjp_gmap_show_map()
     {
         $width = get_option('jjp-map-width') ?: "100%";
-        $height = get_option('jjp-map-height') ?:  "400px";
+        $height = get_option('jjp-map-height') ?: "400px";
 
         return "<div id='map' style='width: $width; height: $height'>map</div>";
     }
@@ -88,7 +88,7 @@ class JJPMapAdmin
     function printAdminPage()
     {
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_name'])){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['form_name'])) {
             if ($_POST['form_name'] == 'api-key' && check_admin_referer('jjp-map-api-key-token')) {
                 $apiKey = sanitize_text_field($_POST['jjp-map-api-key']);
                 update_option('jjp-map-api-key', $apiKey);
@@ -101,10 +101,59 @@ class JJPMapAdmin
                 update_option('jjp-map-height', $height);
             }
 
+            if ($_POST['form_name'] == 'tracks' && check_admin_referer('jjp-map-tracks-token')) {
+                if (!empty($_FILES)) {
+                    $file = $_FILES['jjp-map-track-file'];
+                    $fileUploaded = $this->upload_gpx_file($file);
+
+                }
+            }
+
         }
 
 
         require_once plugin_dir_path(__FILE__) . 'index.php';
+    }
+
+    function upload_gpx_file($file)
+    {
+
+        $uploaded = false;
+
+        $upload_dir = wp_upload_dir();
+        $uploadPath = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . "gpx";
+        $fixedUploadPath = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $uploadPath);
+
+        if (file_exists($fixedUploadPath) && is_dir($fixedUploadPath)) {
+            //dir exsist!
+        } else {
+            if (!@mkdir($fixedUploadPath, 0755, true)) {
+                echo '<div class="error" style="padding:10px">
+					Can\'t create <b>' . $fixedUploadPath . '</b> folder. Please create it and make it writable!<br />
+					If not, you will must update the file manually!
+				  </div>';
+            }
+        }
+
+        if (is_writable($fixedUploadPath)) {
+
+            $uploadingFileName = basename($file['name']);
+            $target_path = $fixedUploadPath . "/" . $uploadingFileName;
+
+            if (preg_match('/.gpx$/i', $target_path)) {
+                if (move_uploaded_file($file['tmp_name'], $target_path)) {
+                    echo "<br />File <b>" . $uploadingFileName . "</b> has been uploaded";
+                    $uploaded = true;
+                } else {
+                    echo "<br />There was an error uploading the file, please try again!";
+                }
+            } else {
+                echo "file not supported!";
+            }
+        }
+
+        return $uploaded;
+
     }
 }
 

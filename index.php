@@ -40,12 +40,20 @@
 
     <div>
         <h3>Tracks:</h3>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <input type ="hidden" name="form_name" value ="tracks"/>
             <?php wp_nonce_field('jjp-map-tracks-token'); ?>
 
-            //TODO adding track form
+            <p>
+                <label for="jjp-map-track-file">GPX File:</label>
+                <input type="file" id="jjp-map-track-file" name="jjp-map-track-file">
+            </p>
 
+            //TODO adding track data form (name, distance, date..)
+
+            <p>
+                <input class="button-primary" type="submit" value="Save"/>
+            </p>
         </form>
 
         <div>
