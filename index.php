@@ -38,6 +38,22 @@
         </form>
     </div>
 
+    <div>
+        <h3>Tracks:</h3>
+        <form action="" method="post">
+            <input type ="hidden" name="form_name" value ="tracks"/>
+            <?php wp_nonce_field('jjp-map-tracks-token'); ?>
+
+            //TODO adding track form
+
+        </form>
+
+        <div>
+
+            //TODO tracks list
+
+        </div>
+    </div>
 
     <br style="clear: both;">
 
